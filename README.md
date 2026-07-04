@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Breathe Restaurant & Lounge
 
-## Getting Started
+Marketing site for Breathe Restaurant & Lounge (Independence Layout, Enugu). Next.js 15 (App Router) + TypeScript + Tailwind CSS v4 + Framer Motion.
 
-First, run the development server:
+## Getting started
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open the printed localhost URL (Next.js picks 3000, or the next free port if it's taken).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Reservation requests are emailed via [Resend](https://resend.com). Copy `.env.example` to `.env.local` and fill in:
 
-## Learn More
+- `RESEND_API_KEY` — from the Resend dashboard. Without it, the reservation form still validates client-side but the API returns a graceful "temporarily unavailable" error instead of sending mail.
+- `RESERVATION_TO_EMAIL` — defaults to `breatherestaurantnlounge@gmail.com` if unset.
 
-To learn more about Next.js, take a look at the following resources:
+You'll also need to verify a sending domain in Resend and update the `from` address in `src/app/api/reservations/route.ts` (currently `reservations@breatherestolounge.com`).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Content still pending from the client
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Everything below is real, working code with clearly-labeled placeholder content — search the codebase for `TODO(client)` to find every instance:
 
-## Deploy on Vercel
+- **Logo** — `src/components/ui/Logo.tsx` is a recreated placeholder crest (gold ring monogram + wordmark). Swap in the official logo file/SVG export.
+- **Menu items & prices** — `src/lib/data/menu.ts` has sample dishes, tacos, mains, and cocktails in Naira. Replace with the real menu.
+- **Weekly event** — `src/lib/data/events.ts` guesses "Ladies Monday" for the recurring promo. Confirm the real name/schedule.
+- **Opening hours** — `src/lib/data/site.ts` and the JSON-LD block in `src/app/layout.tsx` use a typical resto-lounge schedule. Confirm real hours.
+- **Photography** — `src/lib/data/images.ts` sources curated Unsplash photos matching the brand's dark/gold aesthetic. Replace with high-res exports from Breathe's own shoots/Instagram.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deployment
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Built for Vercel. Set the environment variables above in the Vercel project settings before going live.
