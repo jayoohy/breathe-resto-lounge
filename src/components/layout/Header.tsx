@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { DisclaimerBanner } from "@/components/layout/DisclaimerBanner";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 
@@ -16,6 +17,8 @@ const navLinks = [
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [menuTop, setMenuTop] = useState(64);
+  const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -23,6 +26,14 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const update = () => setMenuTop(headerRef.current?.offsetHeight ?? 64);
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+  }, [open]);
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
@@ -36,7 +47,8 @@ export function Header() {
       {/* backdrop-blur must stay off the fixed <header> itself — a filter on a fixed
           ancestor becomes the containing block for fixed descendants, which broke the
           full-screen mobile nav below. Applying it to this inner bar instead avoids that. */}
-      <header className="fixed inset-x-0 top-0 z-50">
+      <header ref={headerRef} className="fixed inset-x-0 top-0 z-50">
+        <DisclaimerBanner />
         <div
           className={`transition-colors duration-300 ${
             scrolled || open ? "bg-ink/90 backdrop-blur-md border-b border-border" : "bg-transparent"
@@ -86,7 +98,8 @@ export function Header() {
       {open && (
         <nav
           id="mobile-menu"
-          className="fixed inset-x-0 top-16 bottom-0 z-40 flex flex-col gap-1 overflow-y-auto border-t border-border bg-ink px-5 pb-6 pt-2 lg:hidden"
+          style={{ top: menuTop }}
+          className="fixed inset-x-0 bottom-0 z-40 flex flex-col gap-1 overflow-y-auto border-t border-border bg-ink px-5 pb-6 pt-2 lg:hidden"
         >
           {navLinks.map((link) => (
             <a

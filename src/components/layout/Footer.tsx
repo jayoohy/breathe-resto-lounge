@@ -1,5 +1,6 @@
 import { Logo } from "@/components/ui/Logo";
 import { site } from "@/lib/data/site";
+import { disclaimer } from "@/lib/data/disclaimer";
 
 const exploreLinks = [
   { href: "#about", label: "About" },
@@ -111,7 +112,9 @@ export function Footer() {
       </div>
 
       <div className="border-t border-border px-5 py-6 text-center text-xs text-cream-muted/70 sm:px-8">
-        © {new Date().getFullYear()} Breathe Restaurant & Lounge. All rights reserved.
+        <p>
+          {disclaimer.label} {disclaimer.message}
+        </p>
       </div>
     </footer>
   );
